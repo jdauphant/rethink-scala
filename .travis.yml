@@ -10,6 +10,8 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq rethinkdb libprotobuf-dev protobuf-compiler python-software-properties
   - sudo ldconfig
+env:
+  - SBT_OPTS="-XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M"
 before_script:
   - rethinkdb --daemon
   - rethinkdb admin set auth foobar
