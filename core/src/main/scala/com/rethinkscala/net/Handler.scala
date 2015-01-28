@@ -19,18 +19,25 @@ class RethinkChannelHandler[T] extends SimpleChannelUpstreamHandler {
 
   implicit def channelHandlerContext2Promise(ctx: ChannelHandlerContext) = Some(ctx.getChannel.getAttachment.asInstanceOf[Handler])
 
-  override def messageReceived(ctx: ChannelHandlerContext, e: MessageEvent) {
-    val (tokenId, response) = e.getMessage.asInstanceOf[(Long, T)]
-    ctx.map(_.handle(tokenId, response))
-  }
-
   override def exceptionCaught(ctx: ChannelHandlerContext, e: ExceptionEvent) {
     ctx.map(_.failure(e.getCause))
   }
 }
 
 class ProtoChannelHandler extends RethinkChannelHandler[Response]
+{
+  override def messageReceived(ctx: ChannelHandlerContext, e: MessageEvent) {
+    val response = e.getMessage.asInstanceOf[Response]
+    ctx.map(_.handle(response.getToken, response))
+  }
+}
 
 class JsonChannelHandler extends RethinkChannelHandler[String]
+{
+  override def messageReceived(ctx: ChannelHandlerContext, e: MessageEvent) {
+    val (tokenId, response) = e.getMessage.asInstanceOf[(Long, String)]
+    ctx.map(_.handle(tokenId, response))
+  }
+}
 
 
