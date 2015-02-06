@@ -77,7 +77,19 @@ object Pluck {
   def apply(target: Record, attrs: Seq[String]) = OPluck(target, Left(attrs))
 
   def apply(target: Record, m: Map[String, Any]) = OPluck(target, Right(m))
+
+  def apply[L,R](target: JoinTyped[L,R], attrs: Seq[String]) = JPluck(target, Left(attrs))
+
+  def apply[L,R](target: JoinTyped[L,R], m: Map[String, Any]) = JPluck(target, Right(m))
 }
+
+
+/** Plucks out one or more attributes from either an object or a sequence of objects (projection).
+  * @param target
+  * @param data
+  */
+case class JPluck[L,R](target: JoinTyped[L,R], data: Either[Seq[String], Map[String, Any]]) extends Pluck
+with ProduceJoin[L,R]
 
 
 /** Plucks out one or more attributes from either an object or a sequence of objects (projection).

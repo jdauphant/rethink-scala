@@ -3,7 +3,6 @@ package com.rethinkscala.ast
 import com.rethinkscala._
 
 
-
 sealed trait DataType {
 
   def name: String
@@ -86,7 +85,7 @@ object Ref{
 }
 trait Ref extends Sequence[Any] with Numeric with Binary with Record with Literal with Strings with Geometry[UnknownGeometry]
 
-with CanManipulate[Pluck,Merge,Without]{
+with CanManipulate[Pluck,Merge,Without] {
   override val underlying = this
 
   //override def add(other: Addition): Add = AnyAdd(underlying, other)

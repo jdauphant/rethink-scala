@@ -147,8 +147,6 @@ with CanManipulate[SPluck[_], Merge, Without] {
   def without(attrs: String*) = Without(underlying, attrs)
 
   def pluck(m: Map[String, Any]) = Pluck(underlying, m)
-
-
 }
 
 trait ProduceSequence[T] extends ProduceSequenceLike[T] with Produce[Seq[T]]
@@ -306,6 +304,9 @@ trait ProduceObject extends Produce[Map[String, Any]] with Record {
 
 trait ProduceJoin[L, R] extends ProduceSequence[JoinResult[L, R]] with JoinTyped[L, R] {
   override val underlying = this
+
+  override def pluck(attrs: String*) = Pluck(underlying, attrs)
+  override def pluck(m: Map[String, Any]) = Pluck(underlying, m)
 }
 
 trait ProduceTime extends TimeTyped {
